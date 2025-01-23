@@ -1,9 +1,11 @@
 package services
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"os"
+	"text/template"
 
 	openai "github.com/sashabaranov/go-openai"
 )
@@ -16,26 +18,29 @@ func GenerarSentencia(falta, demandado, demandante, fecha string) (string, error
 
 	client := openai.NewClient(apiKey)
 
-	prompt := fmt.Sprintf(`
-Eres el juez del "Tribunal de la Haiga", un tribunal con un tono satírico. Tu tarea es generar una sentencia para los casos que se presenten siguiendo este formato específico. Asegúrate de que la sentencia tenga un estilo humorístico pero estructurado, similar a lo que se espera en un tribunal oficial.
+	// Plantilla para el prompt
+	tmplText := `
+Eres el juez del "Tribunal de la Haiga", un tribunal con un tono satírico. 
+Tu tarea es generar una sentencia para los casos que se presenten siguiendo este formato específico. 
+Asegúrate de que la sentencia tenga un estilo humorístico pero estructurado, similar a lo que se espera en un tribunal oficial.
 
 ### Formato de la Sentencia:
 Tribunal de la Haiga
 
 Caso No: Inventa un número de caso
 
-Titulo del caso: Inventa un título del caso
+Titulo del caso: Inventa un título del caso basado en la falta cometida ({{.Falta}})
 
-Demandante: %s
-Demandado: %s
-Fecha: %s
+Demandante: {{.Demandante}}
+Demandado: {{.Demandado}}
+Fecha: {{.Fecha}}
 Magistrado Ponente: Inventa un nombre gracioso
 
 **Hechos del Caso:**
-%s
+Explica los hechos basandte en la siguiente falta: {{.Falta}} incluye al demandante y demandado
 
 **Alegatos de Defensa:**
-Explica los argumentos por los que el demandado podría haber hecho la falta
+Explica los argumentos por los que el demandado podría haber hecho la falta de escribier {{.Falta}}
 
 **Sentencia del Tribunal:**
 Después de un análisis minucioso, el tribunal dicta la siguiente sentencia:
@@ -49,14 +54,42 @@ Nombre del Magistrado Ponente
 Magistrado Ponente
 Tribunal de la Haiga
 
-Por favor, genera una sentencia siguiendo este formato.`, falta, demandado, demandante, fecha)
 
+`
+
+	// Crear la plantilla
+	tmpl, err := template.New("prompt").Parse(tmplText)
+	if err != nil {
+		return "", err
+	}
+
+	// Datos para llenar la plantilla
+	data := struct {
+		Falta      string
+		Demandado  string
+		Demandante string
+		Fecha      string
+	}{
+		Falta:      falta,
+		Demandado:  demandado,
+		Demandante: demandante,
+		Fecha:      fecha,
+	}
+
+	// Rellenar la plantilla con los datos
+	var filledPrompt bytes.Buffer
+	err = tmpl.Execute(&filledPrompt, data)
+	if err != nil {
+		return "", err
+	}
+
+	// Llamar a la API con el prompt generado
 	resp, err := client.CreateChatCompletion(context.Background(), openai.ChatCompletionRequest{
-		Model: openai.GPT4o, // Cambiado a GPT-4o
+		Model: "gpt-4o", // Cambiado a GPT-4o
 		Messages: []openai.ChatCompletionMessage{
-			{Role: openai.ChatMessageRoleUser, Content: prompt},
+			{Role: openai.ChatMessageRoleUser, Content: filledPrompt.String()},
 		},
-		MaxTokens: 200,
+		MaxTokens: 1000,
 	})
 	if err != nil {
 		return "", err
