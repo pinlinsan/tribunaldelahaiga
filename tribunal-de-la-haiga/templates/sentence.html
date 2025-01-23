@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sentencia del Tribunal de la Haiga</title>
-    <!-- Enlace a Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrQkz5+aaH2zF2ZFFqvdGWbXqxSv1YzOmBqXZwnRoWjLxOcjbfR4QtVXf6uZc4ZdM8A6dIsknIsKwrj4Iw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -40,11 +38,11 @@
             margin: 5px;
             padding: 10px 15px;
             border-radius: 5px;
-            text-decoration: none;
             font-size: 16px;
             transition: all 0.3s ease;
             color: white;
             border: none;
+            text-decoration: none;
             cursor: pointer;
         }
         .share-buttons button:hover,
@@ -97,10 +95,16 @@
     <!-- Botones para compartir -->
     <div class="share-buttons">
         <h3>¡Comparte esta sentencia!</h3>
-        <button class="copy" onclick="copiarEnlace()">
-            <i class="fas fa-link"></i> Copiar enlace
-        </button>
+        <button class="copy" onclick="copiarEnlace()">Copiar enlace</button>
         <a href="https://wa.me/?text=¡Mira esta sentencia! {{ . }}" target="_blank" class="whatsapp">
-            <i class="fab fa-whatsapp"></i> WhatsApp
+            Compartir en WhatsApp
         </a>
-        <a href="https://twitter.com/intent/tweet?tex
+        <a href="https://twitter.com/intent/tweet?text=¡Mira esta sentencia!&url={{ . }}" target="_blank" class="twitter">
+            Compartir en Twitter
+        </a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ . }}" target="_blank" class="facebook">
+            Compartir en Facebook
+        </a>
+    </div>
+</body>
+</html>
