@@ -1,6 +1,7 @@
 package services
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"os"
@@ -10,6 +11,7 @@ import (
 )
 
 func GenerarSentencia(falta, demandado, demandante, fecha string) (string, error) {
+	// Verificar que la API key esté configurada
 	apiKey := os.Getenv("OPENAI_API_KEY")
 	if apiKey == "" {
 		return "", fmt.Errorf("OPENAI_API_KEY no está configurada")
@@ -17,7 +19,7 @@ func GenerarSentencia(falta, demandado, demandante, fecha string) (string, error
 
 	client := openai.NewClient(apiKey)
 
-	// Template del prompt con estructura HTML
+	// Template del prompt
 	promptTemplate := `
 <h1>Sentencia del Tribunal de la Haiga</h1>
 <p><strong>Tribunal de la Haiga Caso No:</strong> Inventa un número de caso</p>
@@ -44,7 +46,7 @@ Explica quién tiene razón y si hay alguna pena asociada al delito ortográfico
 		return "", fmt.Errorf("error creando el template: %v", err)
 	}
 
-	// Variables para el template
+	// Datos para el template
 	data := struct {
 		Falta      string
 		Demandado  string
@@ -58,55 +60,15 @@ Explica quién tiene razón y si hay alguna pena asociada al delito ortográfico
 	}
 
 	// Renderizar el prompt
-	var renderedPrompt string
-	err = tmpl.Execute(&renderedPrompt, data)
+	var filledPrompt bytes.Buffer
+	err = tmpl.Execute(&filledPrompt, data)
 	if err != nil {
 		return "", fmt.Errorf("error ejecutando el template: %v", err)
 	}
 
-	// Llamada a la API
+	// Llamada a la API de OpenAI
 	resp, err := client.CreateChatCompletion(context.Background(), openai.ChatCompletionRequest{
-		Model: openai.GPT4,
-		Messages: []openai.ChatCompletionMessage{
-			{Role: openai.ChatMessageRoleUser, Content: renderedPrompt},
-		},
-		MaxTokens: 1000,
-	})
-	if err != nil {
-		return "", err
-	}
-
-	if len(resp.Choices) > 0 {
-		return resp.Choices[0].Message.Content, nil
-	}
-
-	return "", nil
-}
-
-
-	// Datos para llenar la plantilla
-	data := struct {
-		Falta      string
-		Demandado  string
-		Demandante string
-		Fecha      string
-	}{
-		Falta:      falta,
-		Demandado:  demandado,
-		Demandante: demandante,
-		Fecha:      fecha,
-	}
-
-	// Rellenar la plantilla con los datos
-	var filledPrompt bytes.Buffer
-	err = tmpl.Execute(&filledPrompt, data)
-	if err != nil {
-		return "", err
-	}
-
-	// Llamar a la API con el prompt generado
-	resp, err := client.CreateChatCompletion(context.Background(), openai.ChatCompletionRequest{
-		Model: "gpt-4o", // Cambiado a GPT-4o
+		Model: "gpt-4o", // Modelo actualizado a GPT-4o
 		Messages: []openai.ChatCompletionMessage{
 			{Role: openai.ChatMessageRoleUser, Content: filledPrompt.String()},
 		},
@@ -116,6 +78,7 @@ Explica quién tiene razón y si hay alguna pena asociada al delito ortográfico
 		return "", err
 	}
 
+	// Verificar la respuesta
 	if len(resp.Choices) > 0 {
 		return resp.Choices[0].Message.Content, nil
 	}
