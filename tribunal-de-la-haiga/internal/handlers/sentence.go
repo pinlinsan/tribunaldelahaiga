@@ -9,6 +9,7 @@ import (
 	"github.com/pinlinsan/tribunaldelahaiga/internal/services"
 )
 
+// Template para renderizar la sentencia
 var sentenciaTemplate = template.Must(template.New("sentence").Parse(`
 <!DOCTYPE html>
 <html lang="es">
@@ -45,19 +46,25 @@ var sentenciaTemplate = template.Must(template.New("sentence").Parse(`
 </html>
 `))
 
+// Maneja el formulario enviado desde la página principal
 func FormHandler(w http.ResponseWriter, r *http.Request) {
+	// Parsear los datos del formulario
 	err := r.ParseForm()
 	if err != nil {
 		http.Error(w, "Error al parsear el formulario", http.StatusBadRequest)
 		return
 	}
 
+	// Extraer los valores del formulario
 	falta := r.FormValue("falta_ortografia")
 	demandado := r.FormValue("nombre_demandado")
 	demandante := r.FormValue("nombre_demandante")
 	fecha := r.FormValue("fecha")
 
-	// Llamada a la API de ChatGPT
+	// Log para verificar los datos ingresados
+	log.Printf("Formulario recibido - Falta: %s, Demandado: %s, Demandante: %s, Fecha: %s", falta, demandado, demandante, fecha)
+
+	// Llamada a la API de ChatGPT para generar la sentencia
 	sentencia, err := services.GenerarSentencia(falta, demandado, demandante, fecha)
 	if err != nil {
 		log.Printf("Error llamando a OpenAI: %v", err)
@@ -65,19 +72,29 @@ func FormHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Guardar la sentencia en memoria y obtener ID
+	// Guardar la sentencia en memoria y obtener su ID
 	id := services.GuardarSentencia(sentencia)
 
-	// Redirigir a /sentencia/{id}
+	// Log para verificar el ID generado
+	log.Printf("Sentencia guardada con ID: %s", id)
+
+	// Redirigir al endpoint de la sentencia generada
 	http.Redirect(w, r, "/sentencia/"+id, http.StatusSeeOther)
 }
 
+// Maneja la visualización de una sentencia por ID
 func SentenceHandler(w http.ResponseWriter, r *http.Request) {
+	// Obtener el ID de la sentencia desde la URL
 	vars := mux.Vars(r)
 	id := vars["id"]
 
 	// Obtener la sentencia por ID
 	sentencia := services.ObtenerSentenciaPorID(id)
+
+	// Log para verificar el contenido de la sentencia
+	log.Printf("Sentencia obtenida para ID %s: %s", id, sentencia)
+
+	// Verificar si la sentencia existe
 	if sentencia == "" {
 		http.Error(w, "Sentencia no encontrada", http.StatusNotFound)
 		return
