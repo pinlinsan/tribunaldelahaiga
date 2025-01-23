@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Tribunal de la Haiga</title>
+</head>
+<body>
+  <h1>Tribunal de la Haiga</h1>
+  <form action="/enviar-formulario" method="POST">
+    <label for="falta_ortografia">Falta de ortografía:</label><br>
+    <input type="text" name="falta_ortografia" required><br><br>
+
+    <label for="nombre_demandado">Nombre del demandado:</label><br>
+    <input type="text" name="nombre_demandado" required><br><br>
+
+    <label for="nombre_demandante">Nombre del demandante:</label><br>
+    <input type="text" name="nombre_demandante" required><br><br>
+
+    <label for="fecha">Fecha:</label><br>
+    <input type="date" name="fecha" required><br><br>
+
+    <button type="submit">Obtener Sentencia</button>
+  </form>
+</body>
+</html>
