@@ -16,6 +16,22 @@ var sentenciaTemplate = template.Must(template.New("sentence").Parse(`
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sentencia del Tribunal de la Haiga</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 800px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        div {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <h1>Sentencia del Tribunal de la Haiga</h1>
@@ -65,9 +81,12 @@ func SentenceHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Convertir la sentencia en template.HTML para renderizar correctamente etiquetas HTML
+	renderedSentencia := template.HTML(sentencia)
+
 	// Renderizar la sentencia con el template
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	err := sentenciaTemplate.Execute(w, sentencia)
+	err := sentenciaTemplate.Execute(w, renderedSentencia)
 	if err != nil {
 		http.Error(w, "Error al renderizar la sentencia", http.StatusInternalServerError)
 		log.Printf("Error al ejecutar el template: %v", err)
