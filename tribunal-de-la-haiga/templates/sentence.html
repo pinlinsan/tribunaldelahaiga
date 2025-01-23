@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sentencia del Tribunal de la Haiga</title>
+    <!-- Enlace a Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrQkz5+aaH2zF2ZFFqvdGWbXqxSv1YzOmBqXZwnRoWjLxOcjbfR4QtVXf6uZc4ZdM8A6dIsknIsKwrj4Iw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -28,13 +30,77 @@
         p, h2 {
             margin-bottom: 15px;
         }
+        .share-buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .share-buttons a {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            color: white;
+        }
+        .share-buttons a:hover {
+            transform: scale(1.1);
+        }
+        .share-buttons .copy {
+            background-color: #6c757d;
+        }
+        .share-buttons .copy:hover {
+            background-color: #5a6268;
+        }
+        .share-buttons .whatsapp {
+            background-color: #25D366;
+        }
+        .share-buttons .whatsapp:hover {
+            background-color: #1da851;
+        }
+        .share-buttons .twitter {
+            background-color: #1DA1F2;
+        }
+        .share-buttons .twitter:hover {
+            background-color: #0d8ae5;
+        }
+        .share-buttons .facebook {
+            background-color: #3b5998;
+        }
+        .share-buttons .facebook:hover {
+            background-color: #2e4278;
+        }
     </style>
+    <script>
+        function copiarEnlace() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('¡Enlace copiado al portapapeles!');
+            });
+        }
+    </script>
 </head>
 <body>
     <h1>Sentencia del Tribunal de la Haiga</h1>
     <!-- Renderiza el contenido como HTML -->
     <div class="content">
         {{ . }}
+    </div>
+
+    <!-- Botones para compartir -->
+    <div class="share-buttons">
+        <h3>¡Comparte esta sentencia!</h3>
+        <button class="copy" onclick="copiarEnlace()"><i class="fas fa-link"></i> Copiar enlace</button>
+        <a href="https://wa.me/?text=¡Mira esta sentencia! {{ . }}" target="_blank" class="whatsapp">
+            <i class="fab fa-whatsapp"></i> WhatsApp
+        </a>
+        <a href="https://twitter.com/intent/tweet?text=¡Mira esta sentencia!&url={{ . }}" target="_blank" class="twitter">
+            <i class="fab fa-twitter"></i> Twitter
+        </a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ . }}" target="_blank" class="facebook">
+            <i class="fab fa-facebook-f"></i> Facebook
+        </a>
     </div>
 </body>
 </html>
