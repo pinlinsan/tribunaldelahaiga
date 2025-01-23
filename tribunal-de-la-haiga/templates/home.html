@@ -26,7 +26,7 @@
             max-width: 600px;
             margin: 0 auto;
             background: #fff;
-            padding: 20px;
+            padding: 20px 30px; /* Aumenta el padding horizontal */
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
@@ -74,7 +74,8 @@
         Detalle la falta cometida, identifique al culpable sin piedad y especifique quién reclama justicia. Por último, indique la fecha del lamentable incidente. 
         Una vez que nos ilumine con su relato, emitiremos una sentencia implacable (pero siempre justa y humorística).
     </p>
-    <form action="/procesar" method="POST">
+    <!-- Ajuste realizado aquí -->
+    <form action="/enviar-formulario" method="POST">
         <label for="falta_ortografia">Falta de ortografía:</label>
         <textarea id="falta_ortografia" name="falta_ortografia" placeholder="Describe la falta ortográfica aquí..."></textarea>
 
@@ -87,7 +88,7 @@
         <label for="fecha">Fecha:</label>
         <input type="date" id="fecha" name="fecha">
 
-        <button type="submit">Obtener Sentencia</button>
+        <button type="submit">Dictar Sentencia</button>
     </form>
 </body>
 </html>
