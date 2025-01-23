@@ -34,6 +34,7 @@
             margin-top: 20px;
             text-align: center;
         }
+        .share-buttons button,
         .share-buttons a {
             display: inline-block;
             margin: 5px;
@@ -43,7 +44,10 @@
             font-size: 16px;
             transition: all 0.3s ease;
             color: white;
+            border: none;
+            cursor: pointer;
         }
+        .share-buttons button:hover,
         .share-buttons a:hover {
             transform: scale(1.1);
         }
@@ -77,6 +81,8 @@
             const url = window.location.href;
             navigator.clipboard.writeText(url).then(() => {
                 alert('¡Enlace copiado al portapapeles!');
+            }).catch(() => {
+                alert('Error al copiar el enlace. Intenta manualmente.');
             });
         }
     </script>
@@ -91,16 +97,10 @@
     <!-- Botones para compartir -->
     <div class="share-buttons">
         <h3>¡Comparte esta sentencia!</h3>
-        <button class="copy" onclick="copiarEnlace()"><i class="fas fa-link"></i> Copiar enlace</button>
+        <button class="copy" onclick="copiarEnlace()">
+            <i class="fas fa-link"></i> Copiar enlace
+        </button>
         <a href="https://wa.me/?text=¡Mira esta sentencia! {{ . }}" target="_blank" class="whatsapp">
             <i class="fab fa-whatsapp"></i> WhatsApp
         </a>
-        <a href="https://twitter.com/intent/tweet?text=¡Mira esta sentencia!&url={{ . }}" target="_blank" class="twitter">
-            <i class="fab fa-twitter"></i> Twitter
-        </a>
-        <a href="https://www.facebook.com/sharer/sharer.php?u={{ . }}" target="_blank" class="facebook">
-            <i class="fab fa-facebook-f"></i> Facebook
-        </a>
-    </div>
-</body>
-</html>
+        <a href="https://twitter.com/intent/tweet?tex
