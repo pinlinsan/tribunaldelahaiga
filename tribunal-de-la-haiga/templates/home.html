@@ -26,7 +26,7 @@
             max-width: 600px;
             margin: 0 auto;
             background: #fff;
-            padding: 20px 30px; /* Aumenta el padding horizontal */
+            padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
@@ -76,7 +76,7 @@
     </p>
     <form action="/procesar" method="POST">
         <label for="falta_ortografia">Falta de ortografía:</label>
-        <textarea id="falta_ortografia" name="falta_ortografia" placeholder="Escribe la falta ortográfica aquí..."></textarea>
+        <textarea id="falta_ortografia" name="falta_ortografia" placeholder="Describe la falta ortográfica aquí..."></textarea>
 
         <label for="nombre_demandado">Nombre del demandado:</label>
         <input type="text" id="nombre_demandado" name="nombre_demandado" placeholder="Nombre del acusado...">
@@ -87,7 +87,7 @@
         <label for="fecha">Fecha:</label>
         <input type="date" id="fecha" name="fecha">
 
-        <button type="submit">Dictar Sentencia</button>
+        <button type="submit">Obtener Sentencia</button>
     </form>
 </body>
 </html>
