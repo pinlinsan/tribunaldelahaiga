@@ -23,19 +23,24 @@ var sentenciaTemplate = template.Must(template.New("sentence").Parse(`
             margin: 0 auto;
             padding: 20px;
             max-width: 800px;
+            background-color: #f9f9f9;
         }
         h1 {
             color: #333;
             text-align: center;
         }
-        div {
+        .content {
             margin-top: 20px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
 <body>
     <h1>Sentencia del Tribunal de la Haiga</h1>
-    <div>{{ . }}</div>
+    <div class="content">{{ . }}</div>
 </body>
 </html>
 `))
@@ -55,10 +60,7 @@ func FormHandler(w http.ResponseWriter, r *http.Request) {
 	// Llamada a la API de ChatGPT
 	sentencia, err := services.GenerarSentencia(falta, demandado, demandante, fecha)
 	if err != nil {
-		// Imprime en la consola
 		log.Printf("Error llamando a OpenAI: %v", err)
-
-		// También podrías mostrarlo al usuario (aunque no siempre es deseable por seguridad):
 		http.Error(w, "Error al generar una sentencia: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -84,8 +86,10 @@ func SentenceHandler(w http.ResponseWriter, r *http.Request) {
 	// Convertir la sentencia en template.HTML para renderizar correctamente etiquetas HTML
 	renderedSentencia := template.HTML(sentencia)
 
-	// Renderizar la sentencia con el template
+	// Configurar el encabezado de la respuesta
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+
+	// Renderizar la sentencia con el template
 	err := sentenciaTemplate.Execute(w, renderedSentencia)
 	if err != nil {
 		http.Error(w, "Error al renderizar la sentencia", http.StatusInternalServerError)
