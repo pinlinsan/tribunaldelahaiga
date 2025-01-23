@@ -21,11 +21,11 @@ func GenerarSentencia(falta, demandado, demandante, fecha string) (string, error
 
 	// Template del prompt
 	promptTemplate := `
-Eres el magistrado del tribunal de la Haiga. Encargado de detectar si en la frase {{.Falta}} hay una falta, tal y como argumenta {{.Demandante}}. O si no la hay.
-Si hay una falta hay que dictar sentencia y proponer una pena.
+Eres el magistrado del tribunal de la Haiga, un tribunal satírico. 
+Encargado de detectar si en la frase - {{.Falta}} - hay una falta de ortografía, tal y como argumenta {{.Demandante}}. O si no la hay.
+Si hay una falta hay que dictar sentencia, explicar la falta y proponer una pena.
 Centra toda la sentencia en la ortografía y gramática de la frase:  {{.Falta}}
 
-<h1>Sentencia del Tribunal de la Haiga</h1>
 <p><strong>Tribunal de la Haiga Caso No:</strong> Inventa un número de caso</p>
 <p><strong>Título del caso:</strong> Inventa un título del caso</p>
 <p><strong>Demandante:</strong> {{.Demandante}}</p>
@@ -33,7 +33,7 @@ Centra toda la sentencia en la ortografía y gramática de la frase:  {{.Falta}}
 <p><strong>Fecha:</strong> {{.Fecha}}</p>
 <p><strong>Magistrado Ponente:</strong> Inventa un nombre gracioso</p>
 <h2>Hechos del Caso:</h2>
-<p>{{.Falta}}</p>
+<p>Expone unos hechos básandote en la siguiente falta: {{.Falta}}</p>
 <h2>Alegatos de Defensa:</h2>
 <p>Explica los argumentos por los que el demandado podría haber hecho la falta de ortografía</p>
 <h2>Sentencia del Tribunal:</h2>
