@@ -33,7 +33,7 @@ Centra toda la sentencia en la ortografía y gramática de la frase:  {{.Falta}}
 <p><strong>Fecha:</strong> {{.Fecha}}</p>
 <p><strong>Magistrado Ponente:</strong> Inventa un nombre gracioso</p>
 <h2>Hechos del Caso:</h2>
-<p>Expone unos hechos básandote en la siguiente falta: {{.Falta}}. Los hechos son objetivos (aunque puedan estar redactados de forma jocosa. El tribunal aquí solo describe los hechos, no los valora</p>
+<p>Expone unos hechos básandote en la siguiente falta: {{.Falta}} Los hechos son objetivos (aunque puedan estar redactados de forma jocosa. El tribunal aquí solo describe los hechos, no los valora</p>
 <h2>Alegatos de Defensa:</h2>
 <p>Explica los argumentos por los que el demandado podría haber hecho la falta de ortografía</p>
 <h2>Sentencia del Tribunal:</h2>
