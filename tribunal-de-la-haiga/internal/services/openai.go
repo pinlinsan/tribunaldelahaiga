@@ -1,7 +1,6 @@
 package services
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"os"
@@ -18,50 +17,72 @@ func GenerarSentencia(falta, demandado, demandante, fecha string) (string, error
 
 	client := openai.NewClient(apiKey)
 
-	// Plantilla para el prompt
-	tmplText := `
-Eres el juez del "Tribunal de la Haiga", un tribunal con un tono satírico. 
-Tu tarea es generar una sentencia para los casos que se presenten siguiendo este formato específico. 
-Asegúrate de que la sentencia tenga un estilo humorístico pero estructurado, similar a lo que se espera en un tribunal oficial.
-
-### Formato de la Sentencia:
-Tribunal de la Haiga
-
-Caso No: Inventa un número de caso
-
-Titulo del caso: Inventa un título del caso basado en la falta cometida ({{.Falta}})
-
-Demandante: {{.Demandante}}
-Demandado: {{.Demandado}}
-Fecha: {{.Fecha}}
-Magistrado Ponente: Inventa un nombre gracioso
-
-**Hechos del Caso:**
-Explica los hechos basandte en la siguiente falta: {{.Falta}} incluye al demandante y demandado
-
-**Alegatos de Defensa:**
-Explica los argumentos por los que el demandado podría haber hecho la falta de escribier {{.Falta}}
-
-**Sentencia del Tribunal:**
-Después de un análisis minucioso, el tribunal dicta la siguiente sentencia:
-Explica quién tiene razón y si hay alguna pena asociada al delito ortográfico
-
-**Conclusión:**
-Finaliza con un mensaje humorístico y reflexivo.
-
-Firmado con humor y rigor:
-Nombre del Magistrado Ponente
-Magistrado Ponente
-Tribunal de la Haiga
-
-
+	// Template del prompt con estructura HTML
+	promptTemplate := `
+<h1>Sentencia del Tribunal de la Haiga</h1>
+<p><strong>Tribunal de la Haiga Caso No:</strong> Inventa un número de caso</p>
+<p><strong>Título del caso:</strong> Inventa un título del caso</p>
+<p><strong>Demandante:</strong> {{.Demandante}}</p>
+<p><strong>Demandado:</strong> {{.Demandado}}</p>
+<p><strong>Fecha:</strong> {{.Fecha}}</p>
+<p><strong>Magistrado Ponente:</strong> Inventa un nombre gracioso</p>
+<h2>Hechos del Caso:</h2>
+<p>{{.Falta}}</p>
+<h2>Alegatos de Defensa:</h2>
+<p>Explica los argumentos por los que el demandado podría haber hecho la falta</p>
+<h2>Sentencia del Tribunal:</h2>
+<p>Después de un análisis minucioso, el tribunal dicta la siguiente sentencia:
+Explica quién tiene razón y si hay alguna pena asociada al delito ortográfico</p>
+<h2>Conclusión:</h2>
+<p>Finaliza con un mensaje humorístico y reflexivo</p>
+<p>Firmado con humor y rigor: Nombre del Magistrado Ponente</p>
 `
 
-	// Crear la plantilla
-	tmpl, err := template.New("prompt").Parse(tmplText)
+	// Compilar el template
+	tmpl, err := template.New("prompt").Parse(promptTemplate)
+	if err != nil {
+		return "", fmt.Errorf("error creando el template: %v", err)
+	}
+
+	// Variables para el template
+	data := struct {
+		Falta      string
+		Demandado  string
+		Demandante string
+		Fecha      string
+	}{
+		Falta:      falta,
+		Demandado:  demandado,
+		Demandante: demandante,
+		Fecha:      fecha,
+	}
+
+	// Renderizar el prompt
+	var renderedPrompt string
+	err = tmpl.Execute(&renderedPrompt, data)
+	if err != nil {
+		return "", fmt.Errorf("error ejecutando el template: %v", err)
+	}
+
+	// Llamada a la API
+	resp, err := client.CreateChatCompletion(context.Background(), openai.ChatCompletionRequest{
+		Model: openai.GPT4,
+		Messages: []openai.ChatCompletionMessage{
+			{Role: openai.ChatMessageRoleUser, Content: renderedPrompt},
+		},
+		MaxTokens: 1000,
+	})
 	if err != nil {
 		return "", err
 	}
+
+	if len(resp.Choices) > 0 {
+		return resp.Choices[0].Message.Content, nil
+	}
+
+	return "", nil
+}
+
 
 	// Datos para llenar la plantilla
 	data := struct {
