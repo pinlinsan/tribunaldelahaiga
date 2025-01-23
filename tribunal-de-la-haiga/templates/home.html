@@ -1,25 +1,93 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Tribunal de la Haiga</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tribunal de la Haiga</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        p {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 20px;
+            color: #555;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        input[type="text"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            resize: none;
+        }
+        textarea {
+            height: 100px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
 </head>
 <body>
-  <h1>Tribunal de la Haiga</h1>
-  <form action="/enviar-formulario" method="POST">
-    <label for="falta_ortografia">Falta de ortografía:</label><br>
-    <input type="text" name="falta_ortografia" required><br><br>
+    <h1>Tribunal de la Haiga</h1>
+    <p>
+        Bienvenido, estimado ciudadano lingüístico, al prestigioso y completamente serio Tribunal de la Haiga. 
+        Por favor, rellene el siguiente formulario para presentar su caso ante nuestra honorable corte. 
+        Detalle la falta cometida, identifique al culpable sin piedad y especifique quién reclama justicia. Por último, indique la fecha del lamentable incidente. 
+        Una vez que nos ilumine con su relato, emitiremos una sentencia implacable (pero siempre justa y humorística).
+    </p>
+    <form action="/procesar" method="POST">
+        <label for="falta_ortografia">Falta de ortografía:</label>
+        <textarea id="falta_ortografia" name="falta_ortografia" placeholder="Describe la falta ortográfica aquí..."></textarea>
 
-    <label for="nombre_demandado">Nombre del demandado:</label><br>
-    <input type="text" name="nombre_demandado" required><br><br>
+        <label for="nombre_demandado">Nombre del demandado:</label>
+        <input type="text" id="nombre_demandado" name="nombre_demandado" placeholder="Nombre del acusado...">
 
-    <label for="nombre_demandante">Nombre del demandante:</label><br>
-    <input type="text" name="nombre_demandante" required><br><br>
+        <label for="nombre_demandante">Nombre del demandante:</label>
+        <input type="text" id="nombre_demandante" name="nombre_demandante" placeholder="Nombre del demandante...">
 
-    <label for="fecha">Fecha:</label><br>
-    <input type="date" name="fecha" required><br><br>
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha">
 
-    <button type="submit">Obtener Sentencia</button>
-  </form>
+        <button type="submit">Dictar Sentencia</button>
+    </form>
 </body>
 </html>
