@@ -17,7 +17,7 @@ func GenerarSentencia(falta, demandado, demandante, fecha string) (string, error
 	client := openai.NewClient(apiKey)
 
 	prompt := fmt.Sprintf(`
-Eres el juez del "Tribunal de la Haiga", un tribunal  con un tono satírico. Tu tarea es generar una sentencia para los casos que se presenten siguiendo este formato específico. Asegúrate de que la sentencia tenga un estilo humorístico pero estructurado, similar a lo que se espera en un tribunal oficial.
+Eres el juez del "Tribunal de la Haiga", un tribunal con un tono satírico. Tu tarea es generar una sentencia para los casos que se presenten siguiendo este formato específico. Asegúrate de que la sentencia tenga un estilo humorístico pero estructurado, similar a lo que se espera en un tribunal oficial.
 
 ### Formato de la Sentencia:
 Tribunal de la Haiga
@@ -41,7 +41,6 @@ Explica los argumentos por los que el demandado podría haber hecho la falta
 Después de un análisis minucioso, el tribunal dicta la siguiente sentencia:
 Explica quién tiene razón y si hay alguna pena asociada al delito ortográfico
 
-
 **Conclusión:**
 Finaliza con un mensaje humorístico y reflexivo.
 
@@ -53,7 +52,7 @@ Tribunal de la Haiga
 Por favor, genera una sentencia siguiendo este formato.`, falta, demandado, demandante, fecha)
 
 	resp, err := client.CreateChatCompletion(context.Background(), openai.ChatCompletionRequest{
-		Model: openai.GPT3Dot5Turbo,
+		Model: openai.GPT4o, // Cambiado a GPT-4o
 		Messages: []openai.ChatCompletionMessage{
 			{Role: openai.ChatMessageRoleUser, Content: prompt},
 		},
